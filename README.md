@@ -19,7 +19,7 @@ OptionParser.parse do |parser|
     parser.on( "-v", "--version", "Show version" ) do
         puts "Version is 1.0.0"
     end
-    parser.on( "-o", "--open", "This argument, opened an file." ) do |name|
+    parser.on( "-o NAME", "--open NAME", "This argument, opened an file." ) do |name|
         puts "Opening file..."
         File.open( name ) do |data|
             puts data.read

@@ -1,6 +1,9 @@
 class OptionParser
 
     NAME = "NAME"
+	LEFT = 4
+	MIDDLE = 33
+
     attr_reader :args
 
     def self.parse(args = ARGV)
@@ -33,13 +36,17 @@ class OptionParser
         args.each_with_index do |arg, i|
             @flags.each do |flag|
 
-                flag_strip = -> (type_flag) { flag[type_flag].sub( NAME, '' ).strip() }
+                flag_strip = -> (type_flag) do
+					flag[type_flag].sub( NAME, '' ).strip()
+				end
                 has_flag = -> (type_flag) { arg == flag_strip.(type_flag) }
 
                 if has_flag.(:short_flag) or
                    has_flag.(:long_flag)
 
-                    has_name = -> (type_flag) { flag[type_flag].index( NAME ) != nil }
+                    has_name = -> (type_flag) do
+						flag[type_flag].index( NAME ) != nil
+					end
                     value = nil
                     if has_name.(:short_flag) or
                        has_name.(:long_flag)
@@ -60,10 +67,13 @@ class OptionParser
         end
         
         @flags.each do |flag|
-            io << "".ljust(4) + "#{flag[:short_flag]}, #{flag[:long_flag]}".ljust(33) + flag[:description]
+			flags = "#{flag[:short_flag]}, #{flag[:long_flag]}".ljust(MIDDLE)
+			desc = flag[:description]
+            io << "".ljust(LEFT) + flags + desc
             io << "\n"
         end
 
         io.join
     end
 end
+
