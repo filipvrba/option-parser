@@ -23,13 +23,9 @@ class OptionParser
         @banner = banner
     end
 
-    def on(flag, description, &block)
-        on( flag, nil, description, block )
-    end
-
     def on(short_flag, long_flag, description, &block)
-        @flags << { short_flag: short_flag, long_flag: long_flag,
-            description: description, block: block }
+        @flags << { short_flag: short_flag || '', long_flag: long_flag || '',
+            description: description || '', block: block }
     end
 
     def process( args = ARGV )
@@ -67,7 +63,8 @@ class OptionParser
         end
         
         @flags.each do |flag|
-			flags = "#{flag[:short_flag]}, #{flag[:long_flag]}".ljust(MIDDLE)
+            l_flag = !flag[:long_flag].empty? ? ", #{flag[:long_flag]}" : ""
+			flags = "#{flag[:short_flag]}#{l_flag}".ljust(MIDDLE)
 			desc = flag[:description]
             io << "".ljust(LEFT) + flags + desc
             io << "\n"
@@ -76,4 +73,3 @@ class OptionParser
         io.join
     end
 end
-
