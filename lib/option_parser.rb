@@ -1,6 +1,5 @@
 class OptionParser
 
-    NAME = "NAME"
 	LEFT = 4
 	MIDDLE = 33
 
@@ -31,9 +30,12 @@ class OptionParser
     def process( args = ARGV )
         args.each_with_index do |arg, i|
             @flags.each do |flag|
+                name = -> (type_flag) do
+                    flag[type_flag].gsub( /[a-z -]/, '' )
+                end
 
                 flag_strip = -> (type_flag) do
-					flag[type_flag].sub( NAME, '' ).strip()
+					flag[type_flag].sub( name.(type_flag), '' ).strip()
 				end
                 has_flag = -> (type_flag) { arg == flag_strip.(type_flag) }
 
@@ -41,9 +43,10 @@ class OptionParser
                    has_flag.(:long_flag)
 
                     has_name = -> (type_flag) do
-						flag[type_flag].index( NAME ) != nil
+						name.(type_flag) != ""
 					end
                     value = nil
+
                     if has_name.(:short_flag) or
                        has_name.(:long_flag)
                         value = args[i + 1]
