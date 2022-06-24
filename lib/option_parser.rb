@@ -12,6 +12,10 @@ class OptionParser
         parser
     end
 
+    def self.last_arg(args = ARGV)
+        args.length > 1 ? args[args.length - 1] : nil
+    end
+
     def initialize(args = ARGV)
         @args = args
         @banner = nil
